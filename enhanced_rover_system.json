@@ -1,0 +1,299 @@
+{
+  "rover_dynamics": {
+    "physics_engine": {
+      "position_interpolation": "cubic_bezier",
+      "velocity_smoothing": "exponential_moving_average",
+      "acceleration_model": "realistic_motor_response",
+      "turning_dynamics": "ackermann_steering",
+      "wheel_slip_factor": 0.95,
+      "terrain_friction": 0.8
+    },
+    "movement_parameters": {
+      "max_acceleration": 0.008,
+      "max_deceleration": 0.012,
+      "turning_radius_min": 0.0,
+      "angular_velocity_max": 0.5,
+      "position_update_rate": 60,
+      "movement_smoothing_factor": 0.85
+    },
+    "waypoint_navigation": {
+      "approach_threshold": 2.0,
+      "arrival_threshold": 0.5,
+      "path_deviation_tolerance": 1.0,
+      "replanning_trigger": 2.5,
+      "waypoint_dwell_time": 3.0,
+      "task_execution_simulation": true
+    }
+  },
+  "rover_visualization": {
+    "rover_design": {
+      "body": {
+        "length": 2.5,
+        "width": 2.4,
+        "height": 1.0,
+        "color": "#E5E7EB",
+        "detail_color": "#9CA3AF",
+        "shape": "rectangular_chassis"
+      },
+      "suspension": {
+        "type": "rocker_bogie",
+        "wheel_positions": [
+          {
+            "x": -1.0,
+            "y": -0.8,
+            "name": "front_left"
+          },
+          {
+            "x": -1.0,
+            "y": 0.8,
+            "name": "front_right"
+          },
+          {
+            "x": 0.0,
+            "y": -0.8,
+            "name": "middle_left"
+          },
+          {
+            "x": 0.0,
+            "y": 0.8,
+            "name": "middle_right"
+          },
+          {
+            "x": 1.0,
+            "y": -0.8,
+            "name": "rear_left"
+          },
+          {
+            "x": 1.0,
+            "y": 0.8,
+            "name": "rear_right"
+          }
+        ],
+        "wheel_radius": 0.25,
+        "wheel_width": 0.15
+      },
+      "sensors": {
+        "camera_positions": [
+          {
+            "x": -1.2,
+            "y": 0,
+            "z": 0.8,
+            "name": "nav_cam_front"
+          },
+          {
+            "x": 1.2,
+            "y": 0,
+            "z": 0.8,
+            "name": "nav_cam_rear"
+          },
+          {
+            "x": 0,
+            "y": -1.0,
+            "z": 0.8,
+            "name": "nav_cam_left"
+          },
+          {
+            "x": 0,
+            "y": 1.0,
+            "z": 0.8,
+            "name": "nav_cam_right"
+          }
+        ],
+        "lidar_position": {
+          "x": 0,
+          "y": 0,
+          "z": 1.2
+        },
+        "radar_position": {
+          "x": -0.5,
+          "y": 0,
+          "z": 1.0
+        }
+      },
+      "equipment": {
+        "solar_panels": {
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 1.1
+          },
+          "size": {
+            "length": 2.2,
+            "width": 2.0
+          },
+          "tilt_angle": 15
+        },
+        "robotic_arm": {
+          "base_position": {
+            "x": 0.5,
+            "y": 0.5,
+            "z": 0.3
+          },
+          "segments": 4,
+          "total_reach": 1.8
+        },
+        "drill": {
+          "position": {
+            "x": 0.8,
+            "y": 0.3,
+            "z": 0.2
+          },
+          "depth_capability": 0.6
+        }
+      }
+    },
+    "track_visualization": {
+      "wheel_tracks": {
+        "width": 0.15,
+        "color": "#78716C",
+        "opacity": 0.6,
+        "fade_time": 30.0,
+        "spacing": 0.1
+      },
+      "path_line": {
+        "planned_path": {
+          "color": "#3B82F6",
+          "width": 2,
+          "style": "dashed",
+          "opacity": 0.7
+        },
+        "actual_path": {
+          "color": "#10B981",
+          "width": 3,
+          "style": "solid",
+          "opacity": 0.9
+        }
+      },
+      "waypoint_markers": {
+        "size": 12,
+        "colors": {
+          "pending": "#6B7280",
+          "current": "#F59E0B",
+          "completed": "#10B981",
+          "failed": "#EF4444"
+        },
+        "animation": "pulsing",
+        "labels": true,
+        "task_info": true
+      }
+    }
+  },
+  "environment_system": {
+    "terrain": {
+      "grid_system": {
+        "cell_size": 5.0,
+        "grid_color": "#374151",
+        "grid_opacity": 0.3,
+        "coordinate_labels": true,
+        "scale_indicators": true
+      },
+      "elevation_model": {
+        "enabled": true,
+        "height_variation": 2.0,
+        "smoothing": "perlin_noise",
+        "color_coding": true
+      },
+      "surface_features": {
+        "rock_scatter": {
+          "density": 0.1,
+          "size_range": [
+            0.1,
+            1.5
+          ],
+          "color": "#57534E"
+        },
+        "dust_patches": {
+          "enabled": true,
+          "color": "#A3A3A3",
+          "opacity": 0.4
+        }
+      }
+    },
+    "obstacles": {
+      "rendering": {
+        "3d_effect": true,
+        "shadow_casting": true,
+        "material_textures": true,
+        "collision_boundaries": true
+      },
+      "types": {
+        "boulder": {
+          "color": "#44403C",
+          "texture": "rough"
+        },
+        "crater": {
+          "color": "#292524",
+          "depth_shading": true
+        },
+        "structure": {
+          "color": "#6B7280",
+          "geometric": true
+        },
+        "vegetation": {
+          "color": "#16A34A",
+          "organic": true
+        }
+      }
+    },
+    "atmospheric_effects": {
+      "dust_particles": {
+        "enabled": true,
+        "density": 0.1,
+        "movement": "brownian",
+        "visibility_impact": true
+      },
+      "lighting": {
+        "type": "mars_lighting",
+        "sun_angle": 45,
+        "ambient_color": "#FEF3C7",
+        "shadow_intensity": 0.6
+      }
+    }
+  },
+  "mission_execution": {
+    "task_automation": {
+      "autonomous_execution": true,
+      "task_sequencing": "priority_queue",
+      "parallel_processing": [
+        "navigation",
+        "sensing",
+        "data_collection"
+      ],
+      "error_recovery": "automatic_retry",
+      "human_intervention": "on_critical_error"
+    },
+    "real_time_updates": {
+      "position_broadcast_rate": 10,
+      "sensor_data_rate": 5,
+      "health_monitor_rate": 1,
+      "chart_update_rate": 2,
+      "ui_refresh_rate": 30
+    },
+    "data_logging": {
+      "telemetry_buffer_size": 10000,
+      "data_compression": true,
+      "real_time_export": false,
+      "mission_replay": true
+    }
+  },
+  "ui_improvements": {
+    "control_responsiveness": {
+      "button_feedback": "immediate",
+      "state_transitions": "animated",
+      "loading_indicators": "professional",
+      "error_notifications": "contextual"
+    },
+    "visual_feedback": {
+      "rover_selection": "highlight_on_hover",
+      "waypoint_editing": "drag_and_drop",
+      "path_preview": "real_time",
+      "collision_warning": "visual_alert"
+    },
+    "data_presentation": {
+      "precision_display": "engineering_notation",
+      "unit_conversion": "metric_imperial",
+      "trend_indicators": "directional_arrows",
+      "threshold_alerts": "color_coded"
+    }
+  }
+}

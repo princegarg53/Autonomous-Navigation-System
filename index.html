@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Autonomous Navigation System Mission Control Interface">
+    <title>Autonomous Navigation System</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="mission-control">
+        <!-- Header Section -->
+        <header class="header" role="banner">
+            <div class="header-content">
+                <div class="mission-logo">
+                    <div class="logo-icon" aria-hidden="true">🚀</div>
+                    <div class="mission-title">
+                        <h1>Autonomous Navigation System</h1>
+                        <p>Mission Control Interface</p>
+                    </div>
+                </div>
+                <div class="system-status">
+                    <div class="status-indicator active" aria-live="polite">
+                        <span class="status-dot" aria-hidden="true"></span>
+                        <div class="status-text">
+                            <span class="status-label">SYSTEM</span>
+                            <span class="status-value">ONLINE</span>
+                        </div>
+                    </div>
+                    <div class="mission-timer">
+                        <span class="timer-label">MISSION TIME</span>
+                        <span id="globalTimer" class="timer-value" aria-live="polite">00:00:00</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Control Interface -->
+        <main class="control-interface" role="main">
+            <!-- Left Panel - Mission Controls -->
+            <aside class="left-panel" role="complementary">
+                <!-- Mission Profile Selection -->
+                <section class="control-panel profile-panel" aria-labelledby="mission-profiles-label">
+                    <h3 id="mission-profiles-label"><span class="panel-icon" aria-hidden="true">📋</span>Mission Profiles</h3>
+                    <div class="profile-selector">
+                        <select id="missionProfile" class="form-control profile-select" aria-label="Select Mission Profile">
+                            <option value="geological">Geological Survey</option>
+                            <option value="rescue">Search & Rescue</option>
+                            <option value="infrastructure">Infrastructure Inspection</option>
+                        </select>
+                        <button id="loadProfileBtn" class="btn btn--secondary btn--full-width" aria-label="Load Selected Mission Profile">
+                            Load Mission Profile
+                        </button>
+                    </div>
+                    <div class="profile-info" id="profileInfo" aria-live="polite">
+                        <div class="info-item">
+                            <label for="profileDuration">Duration:</label>
+                            <span id="profileDuration">4.5 hours</span>
+                        </div>
+                        <div class="info-item">
+                            <label for="profileDistance">Distance:</label>
+                            <span id="profileDistance">150 meters</span>
+                        </div>
+                        <div class="info-item">
+                            <label for="profileWaypoints">Waypoints:</label>
+                            <span id="profileWaypoints">7 locations</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Primary Mission Controls -->
+                <section class="control-panel mission-control-panel" aria-labelledby="mission-controls-label">
+                    <h3 id="mission-controls-label"><span class="panel-icon" aria-hidden="true">🎮</span>Mission Controls</h3>
+                    <button id="startMissionBtn" class="btn btn--primary btn--large mission-start-btn" aria-label="Start Mission">
+                        <div class="btn-content">
+                            <span class="btn-icon" aria-hidden="true">▶</span>
+                            <div class="btn-text">
+                                <span class="btn-title">Start Mission</span>
+                                <span class="btn-subtitle">Begin autonomous navigation</span>
+                            </div>
+                        </div>
+                    </button>
+                    <div class="control-buttons">
+                        <button id="pauseMissionBtn" class="btn btn--warning btn--control" disabled aria-label="Pause Mission" aria-disabled="true">
+                            <span class="btn-icon" aria-hidden="true">⏸</span>
+                            Pause
+                        </button>
+                        <button id="stopMissionBtn" class="btn btn--danger btn--control" disabled aria-label="Stop Mission" aria-disabled="true">
+                            <span class="btn-icon" aria-hidden="true">⏹</span>
+                            Stop
+                        </button>
+                        <button id="emergencyBtn" class="btn btn--emergency btn--control" aria-label="Emergency Stop">
+                            <span class="btn-icon" aria-hidden="true">⚠</span>
+                            Emergency
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Mission Status Panel -->
+                <section class="control-panel status-panel" aria-labelledby="mission-status-label">
+                    <h3 id="mission-status-label"><span class="panel-icon" aria-hidden="true">📊</span>Mission Status</h3>
+                    <div class="status-grid">
+                        <div class="status-item">
+                            <label for="missionStatus">Current Status:</label>
+                            <span id="missionStatus" class="status status--info">READY</span>
+                        </div>
+                        <div class="status-item">
+                            <label for="waypointProgress">Progress:</label>
+                            <span id="waypointProgress">0 of 0</span>
+                        </div>
+                        <div class="status-item">
+                            <label for="currentTask">Current Task:</label>
+                            <span id="currentTask">Ready to Deploy</span>
+                        </div>
+                        <div class="status-item">
+                            <label for="missionETA">ETA:</label>
+                            <span id="missionETA">--:--:--</span>
+                        </div>
+                        <div class="status-item">
+                            <label for="missionEfficiency">Efficiency:</label>
+                            <span id="missionEfficiency">---%</span>
+                        </div>
+                        <div class="status-item">
+                            <label for="systemHealth">Health:</label>
+                            <span id="systemHealth" class="status status--success">OPTIMAL</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Rover Telemetry -->
+                <section class="control-panel telemetry-panel" aria-labelledby="rover-telemetry-label">
+                    <h3 id="rover-telemetry-label"><span class="panel-icon" aria-hidden="true">🔧</span>Rover Telemetry</h3>
+                    <div class="telemetry-grid">
+                        <div class="telem-item">
+                            <div class="telem-label">Position</div>
+                            <div id="roverPosition" class="telem-value">100, 100</div>
+                        </div>
+                        <div class="telem-item">
+                            <div class="telem-label">Speed</div>
+                            <div id="roverSpeed" class="telem-value">0.0 m/s</div>
+                        </div>
+                        <div class="telem-item">
+                            <div class="telem-label">Heading</div>
+                            <div id="roverHeading" class="telem-value">090°</div>
+                        </div>
+                        <div class="telem-item">
+                            <div class="telem-label">Battery</div>
+                            <div id="batteryLevel" class="telem-value">100%</div>
+                        </div>
+                        <div class="telem-item">
+                            <div class="telem-label">Power</div>
+                            <div id="powerConsumption" class="telem-value">110W</div>
+                        </div>
+                        <div class="telem-item">
+                            <div class="telem-label">Distance</div>
+                            <div id="totalDistance" class="telem-value">0m</div>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- Center Panel - Autonomous Navigation System Field View -->
+            <section class="center-panel" aria-labelledby="surface-field-view-label">
+                <div class="rover-display">
+                    <div class="display-header">
+                        <h3 id="surface-field-view-label"><span class="panel-icon" aria-hidden="true">🔭</span>Surface Field View</h3>
+                        <div class="display-controls">
+                            <button id="resetViewBtn" class="btn btn--sm btn--outline" aria-label="Reset View">Reset View</button>
+                            <button id="centerRoverBtn" class="btn btn--sm btn--outline" aria-label="Center on Rover">Center Rover</button>
+                        </div>
+                    </div>
+                    <div class="canvas-container" >
+                        <canvas id="roverCanvas" width="800" height="500" aria-label="Rover Navigation Canvas">
+                            Your browser does not support the canvas element.
+                        </canvas>
+                        <div class="canvas-overlay">
+                            <div class="coordinate-display" aria-live="polite">
+                                <span id="mouseCoords">Cursor: 0, 0</span>
+                            </div>
+                            <div class="scale-indicator">
+                                <div class="scale-bar" aria-hidden="true"></div>
+                                <span>10 meters</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="progress-display" aria-live="polite">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Mission Progress">
+                            <div id="progressFill" class="progress-fill" style="width: 0%;"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span>Mission Progress: </span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Panel - Analytics & Charts -->
+            <aside class="right-panel" role="complementary">
+                <!-- Real-time Analytics -->
+                <section class="control-panel analytics-panel" aria-labelledby="real-time-analytics-label">
+                    <h3 id="real-time-analytics-label"><span class="panel-icon" aria-hidden="true">📈</span>Real-Time Analytics</h3>
+                    <div class="chart-controls">
+                        <select id="chartTypeSelect" class="form-control" aria-label="Select Chart Type">
+                            <option value="mission_progress">Mission Progress</option>
+                            <option value="system_health">System Health</option>
+                            <option value="power_consumption">Power & Performance</option>
+                            <option value="environmental">Environmental Data</option>
+                        </select>
+                    </div>
+                    <div class="chart-container" style="position: relative; height: 200px;">
+                        <canvas id="telemetryChart" aria-label="Telemetry Chart"></canvas>
+                    </div>
+                </section>
+
+                <!-- System Health Monitoring -->
+                <section class="control-panel health-panel" aria-labelledby="system-health-label">
+                    <h3 id="system-health-label"><span class="panel-icon" aria-hidden="true">💊</span>System Health</h3>
+                    <div class="health-monitors" aria-live="polite">
+                        <div class="health-item">
+                            <div class="health-header">
+                                <label for="cpuBar">CPU Load</label>
+                                <span id="cpuValue">25%</span>
+                            </div>
+                            <div class="health-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" aria-label="CPU Load">
+                                <div id="cpuBar" class="health-fill cpu" style="width: 25%;"></div>
+                            </div>
+                        </div>
+                        <div class="health-item">
+                            <div class="health-header">
+                                <label for="memoryBar">Memory Usage</label>
+                                <span id="memoryValue">45%</span>
+                            </div>
+                            <div class="health-bar" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100" aria-label="Memory Usage">
+                                <div id="memoryBar" class="health-fill memory" style="width: 45%;"></div>
+                            </div>
+                        </div>
+                        <div class="health-item">
+                            <div class="health-header">
+                                <label for="tempBar">Temperature</label>
+                                <span id="tempValue">-35°C</span>
+                            </div>
+                            <div class="health-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" aria-label="Temperature">
+                                <div id="tempBar" class="health-fill temperature" style="width: 50%;"></div>
+                            </div>
+                        </div>
+                        <div class="health-item">
+                            <div class="health-header">
+                                <label for="commBar">Communication</label>
+                                <span id="commValue">98%</span>
+                            </div>
+                            <div class="health-bar" role="progressbar" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100" aria-label="Communication Strength">
+                                <div id="commBar" class="health-fill communication" style="width: 98%;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Mission Waypoints Queue -->
+                <section class="control-panel waypoints-panel" aria-labelledby="waypoint-queue-label">
+                    <h3 id="waypoint-queue-label"><span class="panel-icon" aria-hidden="true">🎯</span>Waypoint Queue</h3>
+                    <div class="waypoint-controls">
+                        <button id="clearWaypointsBtn" class="btn btn--outline btn--sm" aria-label="Clear All Waypoints">Clear</button>
+                        <button id="optimizePathBtn" class="btn btn--outline btn--sm" aria-label="Optimize Waypoint Path">Optimize</button>
+                    </div>
+                    <ul id="waypointList" class="waypoint-list" aria-live="polite">
+                        <!-- Waypoints populated by JavaScript -->
+                    </ul>
+                </section>
+
+                <!-- Realtime Rover Status -->
+                <section class="control-panel realtime-status-panel" aria-labelledby="realtime-status-label">
+                    <h3 id="realtime-status-label"><span class="panel-icon" aria-hidden="true">🔔</span>Realtime Status</h3>
+                    <div id="realtimeStatus" class="realtime-status" aria-live="polite">Rover is idle.</div>
+                </section>
+            </aside>
+        </main>
+
+        <!-- Emergency Alert Modal -->
+        <dialog id="emergencyModal" class="modal hidden" aria-modal="true" aria-labelledby="emergency-alert-title">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content emergency-modal">
+                <div class="modal-header">
+                    <h3 id="emergency-alert-title">⚠️ Emergency Alert</h3>
+                </div>
+                <div class="modal-body">
+                    <p id="emergencyMessage">Emergency situation detected</p>
+                </div>
+                <div class="modal-actions">
+                    <button id="acknowledgeBtn" class="btn btn--primary" aria-label="Acknowledge Alert">Acknowledge</button>
+                    <button id="emergencyStopBtn" class="btn btn--danger" aria-label="Initiate Emergency Stop">Emergency Stop</button>
+                </div>
+            </div>
+        </dialog>
+
+        <!-- Success Modal -->
+        <dialog id="successModal" class="modal hidden" aria-modal="true" aria-labelledby="mission-complete-title">
+            <div class="modal-backdrop"></div>
+            <div class="modal-content success-modal">
+                <div class="modal-header">
+                    <h3 id="mission-complete-title">🎉 Mission Complete</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="success-stats" aria-live="polite">
+                        <div class="stat-item">
+                            <label for="completedWaypoints">Waypoints Completed:</label>
+                            <span id="completedWaypoints">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <label for="completedDistance">Total Distance:</label>
+                            <span id="completedDistance">0m</span>
+                        </div>
+                        <div class="stat-item">
+                            <label for="completedTime">Mission Time:</label>
+                            <span id="completedTime">00:00:00</span>
+                        </div>
+                        <div class="stat-item">
+                            <label for="completedEfficiency">Efficiency Score:</label>
+                            <span id="completedEfficiency">100%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button id="newMissionBtn" class="btn btn--primary" aria-label="Start New Mission">New Mission</button>
+                    <button id="closeSuccessBtn" class="btn btn--secondary" aria-label="Close Success Modal">Close</button>
+                </div>
+            </div>
+        </dialog>
+
+        <!-- Loading Overlay -->
+        <div id="loadingOverlay" class="loading-overlay" aria-live="polite">
+            <div class="loading-content">
+                <div class="loading-spinner rover-spinner" aria-hidden="true"></div>
+                <h3>Initializing Autonomous Navigation System</h3>
+                <p id="loadingText">Establishing communication link...</p>
+                <div class="loading-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Loading Progress">
+                    <div id="loadingBar" class="loading-bar" style="width: 0%;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js" defer></script>
+</body>
+</html>
